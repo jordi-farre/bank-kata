@@ -2,11 +2,12 @@ package bankkata
 
 // BankService type
 type BankService struct {
+	Repository AccountRepository
 }
 
 // Deposit blabla
 func (bankService *BankService) Deposit(deposit Deposit) {
-	panic("not implemented")
+	bankService.Repository.Save(deposit)
 }
 
 // Deposit blablas

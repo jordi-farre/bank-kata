@@ -6,14 +6,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_a_deposit(t *testing.T) {
-	var repository = AccountRepositoryInMemory{}
-	var service = BankService{Repository: &repository}
-	var deposit = Deposit{Amount: 12.22}
-	assert := assert.New(t)
+func (repository *AccountRepositoryInMemory) getDeposits() []Deposit {
+	return repository.deposits
+}
 
-	service.Deposit(deposit)
+func Test_save_deposit(t *testing.T) {
+	var repository = AccountRepositoryInMemory{}
+	var deposit = Deposit{Amount: 12.22}
+
+	repository.Save(deposit)
 
 	var deposits = repository.getDeposits()
-	assert.Contains(deposits, deposit)
+	assert.Contains(t, deposits, deposit)
 }

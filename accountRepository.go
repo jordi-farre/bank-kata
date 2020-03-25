@@ -2,15 +2,15 @@ package bankkata
 
 // AccountRepository blabla
 type AccountRepository interface {
-	Save(deposit Deposit)
+	Save(transaction Transaction)
 }
 
 // AccountRepositoryInMemory blabla
 type AccountRepositoryInMemory struct {
-	deposits []Deposit
+	transactions []Transaction
 }
 
 // Save blabla
-func (repository *AccountRepositoryInMemory) Save(deposit Deposit) {
-	repository.deposits = append(repository.deposits, deposit)
+func (repository *AccountRepositoryInMemory) Save(transaction Transaction) {
+	repository.transactions = append(repository.transactions, transaction)
 }

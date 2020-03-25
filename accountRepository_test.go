@@ -2,20 +2,21 @@ package bankkata
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func (repository *AccountRepositoryInMemory) getDeposits() []Deposit {
-	return repository.deposits
+func (repository *AccountRepositoryInMemory) getTransactions() []Transaction {
+	return repository.transactions
 }
 
 func Test_save_deposit(t *testing.T) {
 	var repository = AccountRepositoryInMemory{}
-	var deposit = Deposit{Amount: 12.22}
+	var transaction = Transaction{Amount: 12.22, Date: time.Now()}
 
-	repository.Save(deposit)
+	repository.Save(transaction)
 
-	var deposits = repository.getDeposits()
-	assert.Contains(t, deposits, deposit)
+	var transactions = repository.getTransactions()
+	assert.Contains(t, transactions, transaction)
 }

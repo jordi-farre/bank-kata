@@ -19,5 +19,5 @@ func Test_a_deposit(t *testing.T) {
 
 	service.Deposit(deposit)
 
-	assert.Contains(repository.getTransactions(), transaction)
+	assert.Contains(repository.GetTransactions(), transaction)
 }

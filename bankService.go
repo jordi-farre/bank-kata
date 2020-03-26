@@ -1,6 +1,10 @@
 package bankkata
 
-import "time"
+import (
+	"fmt"
+	"sort"
+	"time"
+)
 
 // BankService type
 type BankService struct {
@@ -17,6 +21,28 @@ func (bankService *BankService) Deposit(deposit Deposit) {
 func (bankService *BankService) Withdrawal(withdrawal Withdrawal) {
 	bankService.Repository.Save(Transaction{Amount: -withdrawal.Amount, Date: bankService.Clock.Now()})
 }
+
+func (bankService *BankService) Report() string {
+	var transactions = bankService.Repository.GetTransactions()
+	var total Amount
+	var reportTransactions []ReportTransaction
+	for _, transaction := range transactions {
+		total += transaction.Amount
+		reportTransactions = append(reportTransactions, ReportTransaction{Transaction: transaction, Total: total})
+	}
+	sort.Sort(sort.Reverse(ByDate(reportTransactions)))
+	var report = "date || transaction || balance\n"
+	for _, reportTransaction := range reportTransactions {
+		report = report + fmt.Sprintf("%s || %v || %v\n", reportTransaction.Date.Format("2006-01-02"), reportTransaction.Amount, reportTransaction.Total)
+	}
+	return report
+}
+
+type ByDate []ReportTransaction
+
+func (a ByDate) Len() int           { return len(a) }
+func (a ByDate) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByDate) Less(i, j int) bool { return a[i].Date.Before(a[j].Date) }
 
 // Amount blabla
 type Amount float32
@@ -35,6 +61,11 @@ type Withdrawal struct {
 type Transaction struct {
 	Amount
 	Date time.Time
+}
+
+type ReportTransaction struct {
+	Transaction
+	Total Amount
 }
 
 // Clock blabla

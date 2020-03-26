@@ -19,5 +19,5 @@ func Test_a_withdrawal(t *testing.T) {
 
 	service.Withdrawal(withdrawal)
 
-	assert.Contains(repository.getTransactions(), transaction)
+	assert.Contains(repository.GetTransactions(), transaction)
 }

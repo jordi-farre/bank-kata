@@ -13,11 +13,21 @@ func (bankService *BankService) Deposit(deposit Deposit) {
 	bankService.Repository.Save(Transaction{Amount: deposit.Amount, Date: bankService.Clock.Now()})
 }
 
+// Withdrawal blabla
+func (bankService *BankService) Withdrawal(withdrawal Withdrawal) {
+	bankService.Repository.Save(Transaction{Amount: -withdrawal.Amount, Date: bankService.Clock.Now()})
+}
+
 // Amount blabla
 type Amount float32
 
 // Deposit blablas
 type Deposit struct {
+	Amount
+}
+
+// Withdrawal blabla
+type Withdrawal struct {
 	Amount
 }
 

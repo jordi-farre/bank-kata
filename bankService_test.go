@@ -38,3 +38,18 @@ func Test_call_repository_to_save_a_deposit(t *testing.T) {
 
 	repository.AssertCalled(t, "Save", transaction)
 }
+
+func Test_call_repository_to_save_a_withdrawal(t *testing.T) {
+	var repository AccountRepositoryMock
+	var clock ClockMock
+	var service = BankService{Repository: &repository, Clock: &clock}
+	var withdrawal = Withdrawal{Amount: 30.43}
+	var date = time.Now()
+	var transaction = Transaction{Amount: -30.43, Date: date}
+	repository.On("Save", transaction).Return(nil)
+	clock.On("Now").Return(date)
+
+	service.Withdrawal(withdrawal)
+
+	repository.AssertCalled(t, "Save", transaction)
+}

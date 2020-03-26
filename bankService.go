@@ -21,13 +21,22 @@ func (bankService *BankService) Withdrawal(withdrawal Withdrawal) {
 
 func (bankService *BankService) Report() string {
 	var transactions = bankService.Repository.GetTransactions()
+	var reportTransactions = bankService.createReportTransactionsFrom(transactions)
+	sort.Sort(sort.Reverse(ByDate(reportTransactions)))
+	return bankService.createReportFrom(reportTransactions)
+}
+
+func (bankService *BankService) createReportTransactionsFrom(transactions []Transaction) []ReportTransaction {
 	var total Amount
 	var reportTransactions []ReportTransaction
 	for _, transaction := range transactions {
 		total += transaction.Amount
 		reportTransactions = append(reportTransactions, ReportTransaction{Transaction: transaction, Total: total})
 	}
-	sort.Sort(sort.Reverse(ByDate(reportTransactions)))
+	return reportTransactions
+}
+
+func (BankService *BankService) createReportFrom(reportTransactions []ReportTransaction) string {
 	var report = "date || transaction || balance\n"
 	for _, reportTransaction := range reportTransactions {
 		report = report + fmt.Sprintf("%s || %v || %v\n", reportTransaction.Date.Format("2006-01-02"), reportTransaction.Amount, reportTransaction.Total)

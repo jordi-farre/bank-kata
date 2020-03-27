@@ -1,4 +1,4 @@
-module sandromancuso/bankkata
+module bankkata
 
 go 1.14
 

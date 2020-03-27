@@ -1,4 +1,4 @@
-package bankkata
+package domain
 
 import (
 	"fmt"

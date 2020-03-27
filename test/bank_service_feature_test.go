@@ -1,6 +1,8 @@
-package bankkata
+package test
 
 import (
+	"bankkata/domain"
+	"bankkata/infrastructure"
 	"testing"
 	"time"
 
@@ -8,15 +10,15 @@ import (
 )
 
 func Test_a_bank_service(t *testing.T) {
-	var repository = AccountRepositoryInMemory{}
+	var repository = infrastructure.AccountRepositoryInMemory{}
 	var clock ClockMock
-	var service = BankService{Repository: &repository, Clock: &clock}
+	var service = domain.BankService{Repository: &repository, Clock: &clock}
 	clock.On("Now").Times(1).Return(time.Parse("2006-01-02", "2020-01-10"))
-	service.Deposit(Deposit{Amount: 1000})
+	service.Deposit(domain.Deposit{Amount: 1000})
 	clock.On("Now").Times(1).Return(time.Parse("2006-01-02", "2020-01-13"))
-	service.Deposit(Deposit{Amount: 2000})
+	service.Deposit(domain.Deposit{Amount: 2000})
 	clock.On("Now").Times(1).Return(time.Parse("2006-01-02", "2020-01-14"))
-	service.Withdrawal(Withdrawal{Amount: 500})
+	service.Withdrawal(domain.Withdrawal{Amount: 500})
 
 	var report = service.Report()
 

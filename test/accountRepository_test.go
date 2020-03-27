@@ -1,6 +1,8 @@
-package bankkata
+package test
 
 import (
+	"bankkata/domain"
+	"bankkata/infrastructure"
 	"testing"
 	"time"
 
@@ -8,8 +10,8 @@ import (
 )
 
 func Test_save_transaction(t *testing.T) {
-	var repository = AccountRepositoryInMemory{}
-	var transaction = Transaction{Amount: 12.22, Date: time.Now()}
+	var repository = infrastructure.AccountRepositoryInMemory{}
+	var transaction = domain.Transaction{Amount: 12.22, Date: time.Now()}
 
 	repository.Save(transaction)
 

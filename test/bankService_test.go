@@ -1,6 +1,7 @@
-package bankkata
+package test
 
 import (
+	"bankkata/domain"
 	"testing"
 	"time"
 
@@ -12,13 +13,13 @@ type AccountRepositoryMock struct {
 	mock.Mock
 }
 
-func (repository *AccountRepositoryMock) Save(transaction Transaction) {
+func (repository *AccountRepositoryMock) Save(transaction domain.Transaction) {
 	repository.Called(transaction)
 }
 
-func (repository *AccountRepositoryMock) GetTransactions() []Transaction {
+func (repository *AccountRepositoryMock) GetTransactions() []domain.Transaction {
 	args := repository.Called()
-	return args.Get(0).([]Transaction)
+	return args.Get(0).([]domain.Transaction)
 }
 
 type ClockMock struct {
@@ -33,10 +34,10 @@ func (clock *ClockMock) Now() time.Time {
 func Test_call_repository_to_save_a_deposit(t *testing.T) {
 	var repository AccountRepositoryMock
 	var clock ClockMock
-	var service = BankService{Repository: &repository, Clock: &clock}
-	var deposit = Deposit{Amount: 12.22}
+	var service = domain.BankService{Repository: &repository, Clock: &clock}
+	var deposit = domain.Deposit{Amount: 12.22}
 	var date = time.Now()
-	var transaction = Transaction{Amount: 12.22, Date: date}
+	var transaction = domain.Transaction{Amount: 12.22, Date: date}
 	repository.On("Save", transaction).Return(nil)
 	clock.On("Now").Return(date)
 
@@ -48,10 +49,10 @@ func Test_call_repository_to_save_a_deposit(t *testing.T) {
 func Test_call_repository_to_save_a_withdrawal(t *testing.T) {
 	var repository AccountRepositoryMock
 	var clock ClockMock
-	var service = BankService{Repository: &repository, Clock: &clock}
-	var withdrawal = Withdrawal{Amount: 30.43}
+	var service = domain.BankService{Repository: &repository, Clock: &clock}
+	var withdrawal = domain.Withdrawal{Amount: 30.43}
 	var date = time.Now()
-	var transaction = Transaction{Amount: -30.43, Date: date}
+	var transaction = domain.Transaction{Amount: -30.43, Date: date}
 	repository.On("Save", transaction).Return(nil)
 	clock.On("Now").Return(date)
 
@@ -62,8 +63,8 @@ func Test_call_repository_to_save_a_withdrawal(t *testing.T) {
 
 func Test_call_repository_to_get_all_transactions(t *testing.T) {
 	var repository AccountRepositoryMock
-	var service = BankService{Repository: &repository}
-	repository.On("GetTransactions").Return([]Transaction{Transaction{Amount: -30.43, Date: time.Now()}})
+	var service = domain.BankService{Repository: &repository}
+	repository.On("GetTransactions").Return([]domain.Transaction{domain.Transaction{Amount: -30.43, Date: time.Now()}})
 
 	service.Report()
 
@@ -72,12 +73,12 @@ func Test_call_repository_to_get_all_transactions(t *testing.T) {
 
 func Test_return_a_report_of_transactions(t *testing.T) {
 	var repository AccountRepositoryMock
-	var service = BankService{Repository: &repository}
+	var service = domain.BankService{Repository: &repository}
 	var date, _ = time.Parse("2006-01-02", "2020-02-11")
-	repository.On("GetTransactions").Return([]Transaction{
-		Transaction{Amount: 5000, Date: date},
-		Transaction{Amount: -2000, Date: date.AddDate(0, 0, 4)},
-		Transaction{Amount: 10000, Date: date.AddDate(0, 0, 7)},
+	repository.On("GetTransactions").Return([]domain.Transaction{
+		domain.Transaction{Amount: 5000, Date: date},
+		domain.Transaction{Amount: -2000, Date: date.AddDate(0, 0, 4)},
+		domain.Transaction{Amount: 10000, Date: date.AddDate(0, 0, 7)},
 	})
 
 	var report = service.Report()

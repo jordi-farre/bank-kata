@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	var clock = domain.SystemClock{}
+	var clock = infrastructure.SystemClock{}
 	var repository = infrastructure.AccountRepositoryInMemory{}
 	var service = domain.BankService{Repository: &repository, Clock: &clock}
 	service.Deposit(domain.Deposit{Amount: 12500})

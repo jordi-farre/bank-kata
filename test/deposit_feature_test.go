@@ -3,6 +3,7 @@ package test
 import (
 	"bankkata/domain"
 	"bankkata/infrastructure"
+	"bankkata/mocks"
 	"testing"
 	"time"
 
@@ -11,7 +12,7 @@ import (
 
 func Test_a_deposit(t *testing.T) {
 	var repository = infrastructure.AccountRepositoryInMemory{}
-	var clock ClockMock
+	var clock mocks.ClockMock
 	var service = domain.BankService{Repository: &repository, Clock: &clock}
 	var deposit = domain.Deposit{Amount: 12.22}
 	var date = time.Now()

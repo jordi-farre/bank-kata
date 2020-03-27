@@ -2,6 +2,7 @@ package test
 
 import (
 	"bankkata/domain"
+	"bankkata/mocks"
 	"testing"
 	"time"
 
@@ -22,18 +23,9 @@ func (repository *AccountRepositoryMock) GetTransactions() []domain.Transaction 
 	return args.Get(0).([]domain.Transaction)
 }
 
-type ClockMock struct {
-	mock.Mock
-}
-
-func (clock *ClockMock) Now() time.Time {
-	args := clock.Called()
-	return args.Get(0).(time.Time)
-}
-
 func Test_call_repository_to_save_a_deposit(t *testing.T) {
 	var repository AccountRepositoryMock
-	var clock ClockMock
+	var clock mocks.ClockMock
 	var service = domain.BankService{Repository: &repository, Clock: &clock}
 	var deposit = domain.Deposit{Amount: 12.22}
 	var date = time.Now()
@@ -48,7 +40,7 @@ func Test_call_repository_to_save_a_deposit(t *testing.T) {
 
 func Test_call_repository_to_save_a_withdrawal(t *testing.T) {
 	var repository AccountRepositoryMock
-	var clock ClockMock
+	var clock mocks.ClockMock
 	var service = domain.BankService{Repository: &repository, Clock: &clock}
 	var withdrawal = domain.Withdrawal{Amount: 30.43}
 	var date = time.Now()
